@@ -37,16 +37,17 @@ class CheckBrackets {
         Stack<Bracket> bracketStack = new Stack<Bracket>();
         boolean success = true;
         int position;
-        Bracket lastBracket = new Bracket('*', 1);
+        Bracket bracket = new Bracket('*', 1);
 
 
         for (position = 0; position < text.length(); ++position) {
             char next = text.charAt(position);
 
             if (next == '(' || next == '[' || next == '{') {
-                // Process opening bracket, write your code here
-                Bracket nextBracket = new Bracket(next, position);
-                bracketStack.push(nextBracket);
+
+                bracket = new Bracket(next, position + 1);
+                bracketStack.push(bracket);
+
             } else if (next == ')' || next == ']' || next == '}') {
 
                 if (bracketStack.isEmpty()) {
@@ -55,9 +56,9 @@ class CheckBrackets {
                     break;
                 }
 
-                lastBracket = bracketStack.pop();
+                bracket = bracketStack.pop();
 
-                if (! lastBracket.Match(next)) {
+                if (! bracket.Match(next)) {
                     success = false;
                     position++;
                     break;
@@ -67,10 +68,14 @@ class CheckBrackets {
 
         if (success && bracketStack.isEmpty()) {
             System.out.println("Success");
-        } else if (! bracketStack.isEmpty()) {
-            System.out.println(position);
+
+        } else if (success) {
+            
+            bracket = bracketStack.pop();
+            System.out.println(bracket.position);
+
         } else {
-            System.out.println(lastBracket.position);
+            System.out.println(position);
         }
 
 
