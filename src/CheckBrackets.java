@@ -70,7 +70,7 @@ class CheckBrackets {
             System.out.println("Success");
 
         } else if (success) {
-            
+
             bracket = bracketStack.pop();
             System.out.println(bracket.position);
 
