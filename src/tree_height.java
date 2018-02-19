@@ -24,15 +24,13 @@ public class tree_height {
     public class Node {
 
         ArrayList<Node> children;
-        int name;
         int height;
 
-        public Node(int name){
-            this.name = name;
+        public Node() {
             this.children = new ArrayList<Node>();
         }
 
-        public void addChild(Node child){
+        public void addChild(Node child) {
             this.children.add(child);
         }
 
@@ -59,7 +57,7 @@ public class tree_height {
             int root = 0;
 
             for (int i = 0; i < n; i++) {
-                nodes[i] = new Node(i);
+                nodes[i] = new Node();
             }
 
             for (int i = 0; i < n; i++) {
