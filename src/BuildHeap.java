@@ -48,13 +48,15 @@ public class BuildHeap {
         int maxIndex = i;
         int l = LeftChild(i);
 
-        if (l <= n && data[l] > data[maxIndex]) {
+        if (l <= n-1 && data[l] > data[maxIndex]) {
             maxIndex = l;
         }
 
         int r = RightChild(i);
 
-        if (r <= n && data[r] > data[maxIndex]) {
+        System.out.println("l " + l + " r " + r);
+
+        if (r <= n-1 && data[r] > data[maxIndex]) {
             maxIndex = r;
         }
 
@@ -75,8 +77,9 @@ public class BuildHeap {
 
         swaps = new ArrayList<Swap>();
 
-        for (int i = (int) Math.floor((n-1) / 2); i >= 0; i--) {
-            System.out.println(i);
+        for (int i = (int) Math.floor(n / 2) - 1; i >= 0; i--) {
+            System.out.println("index" + i);
+            System.out.println(swaps);
             SiftDown(i);
         }
 
