@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class BuildHeap {
+public class BuildMinHeap {
     private int[] data;
     int n;
     private List<Swap> swaps;
@@ -14,7 +14,7 @@ public class BuildHeap {
     private PrintWriter out;
 
     public static void main(String[] args) throws IOException {
-        new BuildHeap().solve();
+        new BuildMinHeap().solve();
     }
 
     private void readData() throws IOException {
@@ -45,28 +45,31 @@ public class BuildHeap {
 
     private void SiftDown(int i) {
 
-        int maxIndex = i;
+        int minIndex = i;
         int l = LeftChild(i);
 
-        if (l <= n-1 && data[l] > data[maxIndex]) {
-            maxIndex = l;
+        if (l <= n-1 && data[l] < data[minIndex]) {
+            minIndex = l;
         }
 
         int r = RightChild(i);
 
-
-        if (r <= n-1 && data[r] > data[maxIndex]) {
-            maxIndex = r;
+        if (r <= n-1 && data[r] < data[minIndex]) {
+            minIndex = r;
         }
 
-        if (i != maxIndex) {
-            swaps.add(new Swap(i, maxIndex));
-            int tmp = data[maxIndex];
-            data[maxIndex] = data[i];
+        System.out.println("i" + i +" l " + l + " r " + r + " min" + minIndex);
+
+        if (i != minIndex) {
+            swaps.add(new Swap(i, minIndex));
+            int tmp = data[minIndex];
+            data[minIndex] = data[i];
             data[i] = tmp;
 
             System.out.println(Arrays.toString(data));
-            SiftDown(maxIndex);
+
+            System.out.println(" ");
+            SiftDown(minIndex);
         }
     }
 
@@ -75,8 +78,8 @@ public class BuildHeap {
 
         swaps = new ArrayList<Swap>();
 
-        for (int i = (int) Math.floor(n / 2) - 1; i >= 0; i--) {
-            System.out.println(swaps);
+        for (int i = (int) (n / 2) - 1; i >= 0; i--) {
+            System.out.println(i);
             SiftDown(i);
         }
 
