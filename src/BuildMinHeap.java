@@ -32,25 +32,16 @@ public class BuildMinHeap {
         }
     }
 
-    private int Parent(int i) {
-        return (int) Math.floor(i / 2);
-    }
     private int LeftChild(int i) {
-        return 2*i;
-    }
-    private int RightChild(int i) {
         return 2*i + 1;
     }
-
+    private int RightChild(int i) {
+        return 2*i + 2;
+    }
 
     private void SiftDown(int i) {
 
         int minIndex = i;
-        int l = LeftChild(i);
-
-        if (l <= n-1 && data[l] < data[minIndex]) {
-            minIndex = l;
-        }
 
         int r = RightChild(i);
 
@@ -58,17 +49,19 @@ public class BuildMinHeap {
             minIndex = r;
         }
 
-        System.out.println("i" + i +" l " + l + " r " + r + " min" + minIndex);
+        int l = LeftChild(i);
+
+        if (l <= n-1 && data[l] < data[minIndex]) {
+            minIndex = l;
+        }
 
         if (i != minIndex) {
+
             swaps.add(new Swap(i, minIndex));
             int tmp = data[minIndex];
             data[minIndex] = data[i];
             data[i] = tmp;
 
-            System.out.println(Arrays.toString(data));
-
-            System.out.println(" ");
             SiftDown(minIndex);
         }
     }
@@ -78,25 +71,10 @@ public class BuildMinHeap {
 
         swaps = new ArrayList<Swap>();
 
-        for (int i = (int) (n / 2) - 1; i >= 0; i--) {
-            System.out.println(i);
+        for (int i = (int) ((n-1) / 2) ; i >= 0; i--) {
             SiftDown(i);
         }
 
-        System.out.println(Arrays.toString(data));
-        System.out.println(swaps);
-
-//        for (int i = 0; i < data.length; ++i) {
-//            for (int j = i + 1; j < data.length; ++j) {
-//                if (data[i] > data[j]) {
-//                    swaps.add(new Swap(i, j));
-//                    int tmp = data[i];
-//                    data[i] = data[j];
-//                    data[j] = tmp;
-//                }
-//            }
-//        }
-//        System.out.println(Arrays.toString(data));
     }
 
     public void solve() throws IOException {
