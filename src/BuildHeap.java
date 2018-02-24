@@ -36,10 +36,10 @@ public class BuildHeap {
         return (int) Math.floor(i / 2);
     }
     private int LeftChild(int i) {
-        return 2*i;
+        return 2*i + 1;
     }
     private int RightChild(int i) {
-        return 2*i + 1;
+        return 2*i + 2;
     }
 
 
