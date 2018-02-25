@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class JobQueue {
@@ -31,15 +32,37 @@ public class JobQueue {
         }
     }
 
+    class Worker {
+        
+        int name;
+        int nextFreeTime;
+
+        public void Worker(int name, int nextFreeTime) {
+            this.name = name;
+            this.nextFreeTime = nextFreeTime;
+        }
+    }
+
     private void assignJobs() {
         // TODO: replace this code with a faster algorithm.
+
+        PriorityQueue<Integer> workerQ = new PriorityQueue<Integer>();
+
+        Worker t = new Worker(2, 4);
+        System.out.println(t.name);
+        System.out.println(t.nextFreeTime);
+
 
         assignedWorker = new int[jobs.length];
         startTime = new long[jobs.length];
         long[] nextFreeTime = new long[numWorkers];
+
+
         for (int i = 0; i < jobs.length; i++) {
             int duration = jobs[i];
             int bestWorker = 0;
+
+
             for (int j = 0; j < numWorkers; ++j) {
                 if (nextFreeTime[j] < nextFreeTime[bestWorker])
                     bestWorker = j;
