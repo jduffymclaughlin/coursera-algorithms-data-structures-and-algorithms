@@ -1,11 +1,13 @@
 import java.io.*;
 import java.util.PriorityQueue;
+import java.util.Comparator;
+import java.util.*;
 import java.util.StringTokenizer;
 
 public class JobQueue {
     
     private int numWorkers;
-    private int[] jobs;
+    private long[] jobs;
 
     private int[] assignedWorker;
     private long[] startTime;
@@ -20,58 +22,56 @@ public class JobQueue {
     private void readData() throws IOException {
         numWorkers = in.nextInt();
         int m = in.nextInt();
-        jobs = new int[m];
+        jobs = new long[m];
         for (int i = 0; i < m; ++i) {
-            jobs[i] = in.nextInt();
-        }
-    }
-
-    private void writeResponse() {
-        for (int i = 0; i < jobs.length; ++i) {
-            out.println(assignedWorker[i] + " " + startTime[i]);
+            jobs[i] = (long) in.nextInt();
         }
     }
 
     class Worker {
-        
-        int name;
-        int nextFreeTime;
 
-        public void Worker(int name, int nextFreeTime) {
+        long name;
+        long nextFreeTime;
+
+        public Worker(long name, long nextFreeTime) {
             this.name = name;
             this.nextFreeTime = nextFreeTime;
         }
+        public String toString() {;
+            return this.name + " " + this.nextFreeTime;
+        }
     }
+
+     class WorkerCompare implements Comparator<Worker> {
+         public int compare(Worker w1, Worker w2) {
+             long timeDiff = w1.nextFreeTime - w2.nextFreeTime;
+
+             if (timeDiff == 0) {
+                 return (int)(w1.name - w2.name);
+             } else {
+                 return (int)(w1.nextFreeTime - w2.nextFreeTime);
+             }
+         }
+     }
+
 
     private void assignJobs() {
         // TODO: replace this code with a faster algorithm.
 
-        PriorityQueue<Integer> workerQ = new PriorityQueue<Integer>();
-
-        Worker t = new Worker(2, 4);
-        System.out.println(t.name);
-        System.out.println(t.nextFreeTime);
-
-
-        assignedWorker = new int[jobs.length];
-        startTime = new long[jobs.length];
-        long[] nextFreeTime = new long[numWorkers];
-
+        WorkerCompare comp = new WorkerCompare();
+        PriorityQueue<Worker> workerQ = new PriorityQueue<Worker>(numWorkers, comp);
+        for (long w = 0; w < numWorkers; w++) {
+            workerQ.add(new Worker(w, 0));
+        }
 
         for (int i = 0; i < jobs.length; i++) {
-            int duration = jobs[i];
-            int bestWorker = 0;
 
+            Worker nextWorker = workerQ.poll();
 
-            for (int j = 0; j < numWorkers; ++j) {
-                if (nextFreeTime[j] < nextFreeTime[bestWorker])
-                    bestWorker = j;
-            }
+            System.out.println(nextWorker);
 
-
-            assignedWorker[i] = bestWorker;
-            startTime[i] = nextFreeTime[bestWorker];
-            nextFreeTime[bestWorker] += duration;
+            nextWorker.nextFreeTime += jobs[i];
+            workerQ.add(nextWorker);
         }
     }
 
@@ -80,7 +80,7 @@ public class JobQueue {
         out = new PrintWriter(new BufferedOutputStream(System.out));
         readData();
         assignJobs();
-        writeResponse();
+        //writeResponse();
         out.close();
     }
 
