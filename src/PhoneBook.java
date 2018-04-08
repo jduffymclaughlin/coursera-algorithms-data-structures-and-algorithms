@@ -8,7 +8,8 @@ import java.util.*;
 public class PhoneBook {
 
     private FastScanner in = new FastScanner();
-    private Contact[] contacts = new Contact[(int) Math.pow(10, 8) - 1];
+    private HashMap<Integer, String> book = new HashMap<Integer, String>();
+
 
     public static void main(String[] args) {
         new PhoneBook().processQueries();
@@ -27,6 +28,7 @@ public class PhoneBook {
         }
     }
 
+
     private void writeResponse(String response) {
         System.out.println(response);
     }
@@ -34,15 +36,17 @@ public class PhoneBook {
     private void processQuery(Query query) {
 
         if (query.type.equals("add")) {
-            contacts[query.number] = new Contact(query.name, query.number);
+            book.put(query.number, query.name);
 
         } else if (query.type.equals("del")) {
-            contacts[query.number] = null;
+            if (book.containsKey(query.number)) {
+                book.remove(query.number);
+            }
 
         } else {
             String response = "not found";
-            if (contacts[query.number] != null) {
-                response = contacts[query.number].name;
+            if (book.containsKey(query.number)) {
+                response = book.get(query.number);
             }
 
             writeResponse(response);
