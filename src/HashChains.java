@@ -10,9 +10,6 @@ public class HashChains {
 
     private FastScanner in;
     private PrintWriter out;
-    // store all strings in one list
-    private List<String> elems;
-    // for hash function
     private int bucketCount;
     private int prime = 1000000007;
     private int multiplier = 263;
@@ -54,52 +51,67 @@ public class HashChains {
     }
 
     private void processQuery(Query query) {
+
+        int idx;
+        boolean found;
+
         switch (query.type) {
             case "add":
+                found = false;
+                idx = hashFunc(query.s);
 
-                System.out.println(Arrays.toString(dict));
-
-                dict[hashFunc(query.s)].add(query.s);
-
-                System.out.println(dict);
-
-                if (!elems.contains(query.s))
-                    elems.add(0, query.s);
-                break;
-
-            case "del":
-                List<String> lst = dict[hashFunc(query.s)];
-
-                for (int i = 0; i < lst.size(); i++) {
-                    if (lst.get(i) == query.s) {
-                        dict[i].remove(i);
+                for (int i = 0; i < dict[idx].size(); i++) {
+                    if (dict[idx].get(i).equals(query.s)) {
+                        found = true;
+                        break;
                     }
                 }
 
-                System.out.println(dict);
+                if (!found) {
+                    dict[hashFunc(query.s)].add(0, query.s);
+                }
+                break;
 
+            case "del":
+                idx = hashFunc(query.s);
 
-                if (elems.contains(query.s))
-                    elems.remove(query.s);
+                for (int i = 0; i < dict[idx].size(); i++) {
+                    if (dict[idx].get(i).equals(query.s)) {
+                        dict[hashFunc(query.s)].remove(i);
+                    }
+                }
 
                 break;
             case "find":
-                writeSearchResult(elems.contains(query.s));
+
+                idx = hashFunc(query.s);
+                found = false;
+
+                for (int i = 0; i < dict[idx].size(); i++) {
+                    if (dict[idx].get(i).equals(query.s)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                writeSearchResult(found);
                 break;
             case "check":
-                for (String cur : elems)
-                    if (hashFunc(cur) == query.ind)
-                        out.print(cur + " ");
+                idx = query.ind;
+
+                for (String s : dict[idx]) {
+                    out.print(s + " ");
+                }
                 out.println();
 
                 break;
             default:
                 throw new RuntimeException("Unknown query: " + query.type);
         }
+        //System.out.println(Arrays.toString(dict));
     }
 
     public void processQueries() throws IOException {
-        elems = new ArrayList<>();
         in = new FastScanner();
         out = new PrintWriter(new BufferedOutputStream(System.out));
         bucketCount = in.nextInt();
